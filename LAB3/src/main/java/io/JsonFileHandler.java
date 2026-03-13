@@ -14,12 +14,28 @@ public class JsonFileHandler {
     private Map<Class<? extends Shape>, ShapeSerializer<Shape>> serializers = new HashMap<>();
     private Map<String, ShapeDeserializer> deserializers = new HashMap<>();
 
+    /**
+     * Registers a shape type along with its JSON serializer and deserializer.
+     *
+     * @param clazz        concrete shape class
+     * @param typeName     type identifier stored in JSON
+     * @param serializer   serializer for converting shapes to JSON fragments
+     * @param deserializer deserializer for reconstructing shapes from properties
+     * @param <T>          shape subtype
+     */
     @SuppressWarnings("unchecked")
     public <T extends Shape> void register(Class<T> clazz, String typeName, ShapeSerializer<T> serializer, ShapeDeserializer deserializer) {
         serializers.put(clazz, (ShapeSerializer<Shape>) serializer);
         deserializers.put(typeName, deserializer);
     }
 
+    /**
+     * Saves a list of shapes to the given file in a simple JSON array format.
+     *
+     * @param file   destination JSON file
+     * @param shapes shapes to serialize
+     * @throws IOException if writing to the file fails
+     */
     public void save(File file, List<Shape> shapes) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("[\n");
@@ -36,6 +52,14 @@ public class JsonFileHandler {
         }
     }
 
+    /**
+     * Loads shapes from a JSON file previously written by {@link #save(File, List)}.
+     * Uses simple pattern matching and the registered deserializers instead of a full JSON library.
+     *
+     * @param file source JSON file
+     * @return list of deserialized shapes
+     * @throws IOException if reading the file fails
+     */
     public List<Shape> load(File file) throws IOException {
         List<Shape> loadedShapes = new ArrayList<>();
         StringBuilder content = new StringBuilder();

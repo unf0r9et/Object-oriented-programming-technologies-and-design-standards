@@ -4,7 +4,16 @@ import shape.Shape;
 import java.awt.Color;
 import java.util.Map;
 
+/**
+ * JSON deserializer for {@link Line} shapes.
+ */
 public class LineDeserializer implements ShapeDeserializer {
+    /**
+     * Deserializes a line from a map of JSON properties.
+     *
+     * @param props property map containing line fields
+     * @return reconstructed {@link Line}
+     */
     @Override
     public Shape deserialize(Map<String, String> props) {
         return new Line(

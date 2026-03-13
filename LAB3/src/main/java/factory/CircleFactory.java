@@ -7,6 +7,9 @@ import java.awt.Color;
  * Factory for creating Circle shapes. Uses the largest drag distance for diameter.
  */
 public class CircleFactory implements ShapeFactory {
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Shape createShape(int startX, int startY, int currentX, int currentY, Color color) {
         int x = Math.min(startX, currentX);

@@ -4,7 +4,17 @@ import ui.UIUtils;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Editor for changing properties of a {@link Triangle}.
+ */
 public class TriangleEditor implements ShapeEditor<Triangle> {
+    /**
+     * Builds a panel with fields to edit triangle vertices.
+     *
+     * @param t        triangle to edit
+     * @param onUpdate callback to invoke after a change
+     * @return panel containing triangle controls
+     */
     @Override
     public JPanel createEditorPanel(Triangle t, Runnable onUpdate) {
         JPanel panel = new JPanel(new GridLayout(0, 2, 5, 5));

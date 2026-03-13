@@ -4,7 +4,16 @@ import shape.Shape;
 import java.awt.Color;
 import java.util.Map;
 
+/**
+ * JSON deserializer for {@link Triangle} shapes.
+ */
 public class TriangleDeserializer implements ShapeDeserializer {
+    /**
+     * Deserializes a triangle from a map of JSON properties.
+     *
+     * @param props property map containing triangle fields
+     * @return reconstructed {@link Triangle}
+     */
     @Override
     public Shape deserialize(Map<String, String> props) {
         return new Triangle(

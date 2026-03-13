@@ -7,6 +7,9 @@ import java.awt.Color;
  * Factory for creating Ellipse shapes.
  */
 public class EllipseFactory implements ShapeFactory {
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Shape createShape(int startX, int startY, int currentX, int currentY, Color color) {
         int x = Math.min(startX, currentX);

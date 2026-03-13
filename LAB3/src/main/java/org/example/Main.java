@@ -2,7 +2,7 @@ package org.example;
 
 import canvas.ShapeCanvas;
 
-// Импорт всех компонентов (Фабрики, Рендереры, Редакторы, IO, Фигуры)
+// Import all components (factories, renderers, editors, IO, shapes)
 import factory.*;
 import render.*;
 import editor.*;
@@ -17,10 +17,21 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 
+/**
+ * Entry point for the graphical editor application.
+ * Configures the main window, registers shapes and serialization handlers,
+ * and wires up the UI tooling around the drawing canvas.
+ */
 public class Main {
+
+    /**
+     * Starts the graphical editor application.
+     *
+     * @param args command-line arguments (not used)
+     */
     public static void main(String[] args) {
         JFrame frame = new JFrame("Graphic Editor v3 (Serialization & UI)");
-        // Окно будет открываться на весь экран, но минимальный размер 800x600
+        // The window opens in fullscreen, with a minimum size of 800x600
         frame.setMinimumSize(new Dimension(800, 600));
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -29,7 +40,7 @@ public class Main {
         JsonFileHandler jsonHandler = new JsonFileHandler();
 
         // =========================================================
-        // РЕГИСТРАЦИЯ ВСЕХ КОМПОНЕНТОВ (БЕЗ IF/SWITCH)
+        // REGISTRATION OF ALL COMPONENTS (WITHOUT IF/SWITCH)
         // =========================================================
 
         // 1. Rectangle
@@ -52,7 +63,7 @@ public class Main {
         canvas.registerShapeType(Line.class, new LineRenderer(), new LineEditor());
         jsonHandler.register(Line.class, "Line", new LineSerializer(), new LineDeserializer());
 
-        // 6. Point (указываем полный путь shape.Point, чтобы не путать с java.awt.Point)
+        // 6. Point (use fully qualified shape.Point to avoid confusion with java.awt.Point)
         canvas.registerShapeType(shape.Point.class, new PointRenderer(), new PointEditor());
         jsonHandler.register(shape.Point.class, "Point", new PointSerializer(), new PointDeserializer());
 
@@ -61,21 +72,21 @@ public class Main {
         jsonHandler.register(Triangle.class, "Triangle", new TriangleSerializer(), new TriangleDeserializer());
 
         // =========================================================
-        // НАСТРОЙКА ИНТЕРФЕЙСА (UI)
+        // UI CONFIGURATION
         // =========================================================
 
-        // Левая панель инструментов
+        // Left toolbar panel
         JPanel leftToolbar = new JPanel(new GridLayout(15, 1, 5, 5));
         leftToolbar.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Правая панель для редактирования свойств
+        // Right panel for editing shape properties
         JPanel rightPanel = new JPanel(new BorderLayout());
         JPanel propertiesPanel = new JPanel();
         rightPanel.add(new JLabel("Properties", SwingConstants.CENTER), BorderLayout.NORTH);
-        rightPanel.add(new JScrollPane(propertiesPanel), BorderLayout.CENTER); // Добавили ScrollPane для удобства
+        rightPanel.add(new JScrollPane(propertiesPanel), BorderLayout.CENTER); // Wrap in ScrollPane for convenience
         rightPanel.setPreferredSize(new Dimension(250, 0));
-
-        // Обновление правой панели при клике на фигуру
+        
+        // Update the right properties panel when a shape is clicked
         canvas.setOnShapeSelected(panel -> {
             propertiesPanel.removeAll();
             propertiesPanel.add(panel);
@@ -84,7 +95,7 @@ public class Main {
         });
 
         // =========================================================
-        // КНОПКИ РИСОВАНИЯ (Tools)
+        // DRAWING BUTTONS (Tools)
         // =========================================================
 
         leftToolbar.add(new JLabel("Tools:", SwingConstants.CENTER));
@@ -119,12 +130,12 @@ public class Main {
         leftToolbar.add(triangleBtn);
 
         // =========================================================
-        // КНОПКИ УПРАВЛЕНИЯ (Actions)
+        // CONTROL BUTTONS (Actions)
         // =========================================================
 
         leftToolbar.add(new JLabel("Actions:", SwingConstants.CENTER));
 
-        // Кнопка Выбора фигуры (Select)
+        // Shape selection button (Select tool)
         JButton selectBtn = new JButton("SELECT TOOL");
         selectBtn.setBackground(Color.YELLOW);
         selectBtn.addActionListener(e -> canvas.setMouseMode(new MouseAdapter() {
@@ -132,16 +143,16 @@ public class Main {
         }));
         leftToolbar.add(selectBtn);
 
-        // Кнопка Удаления
+        // Delete selected shape button
         JButton deleteBtn = new JButton("Delete Selected");
         deleteBtn.addActionListener(e -> canvas.removeSelectedShape());
         leftToolbar.add(deleteBtn);
 
-        // Кнопка Очистки экрана
+        // Clear canvas button
         JButton clearBtn = new JButton("Clear Canvas");
         clearBtn.addActionListener(e -> {
             canvas.getShapes().clear();
-            canvas.selectShapeAt(-1, -1); // Сбросить выделение
+            canvas.selectShapeAt(-1, -1); // Reset selection
             canvas.repaint();
         });
         leftToolbar.add(clearBtn);
@@ -173,20 +184,24 @@ public class Main {
         leftToolbar.add(saveBtn);
         leftToolbar.add(loadBtn);
 
-        // Собираем всё в главное окно
-        frame.add(new JScrollPane(leftToolbar), BorderLayout.WEST); // Добавили скролл для левого меню
+        // Assemble everything into the main window
+        frame.add(new JScrollPane(leftToolbar), BorderLayout.WEST); // Add scroll for the left menu
         frame.add(canvas, BorderLayout.CENTER);
         frame.add(rightPanel, BorderLayout.EAST);
 
-        // По умолчанию включаем прямоугольник
+        // Enable rectangle drawing tool by default
         canvas.setMouseMode(createDrawingAdapter(canvas, new RectangleFactory()));
 
         frame.setVisible(true);
     }
 
     /**
-     * Универсальный метод для создания "рисовалки" с предпросмотром.
-     * Возвращает адаптер мыши, который понимает, как рисовать конкретную фигуру.
+     * Creates a generic drawing mouse adapter with live preview support
+     * for a particular shape type produced by the given factory.
+     *
+     * @param canvas  the canvas on which shapes are drawn
+     * @param factory factory used to create new shape instances
+     * @return configured mouse adapter that handles press/drag/release events
      */
     private static MouseAdapter createDrawingAdapter(ShapeCanvas canvas, ShapeFactory factory) {
         return new MouseAdapter() {
@@ -200,14 +215,14 @@ public class Main {
 
             @Override
             public void mouseDragged(MouseEvent e) {
-                // Создаем временную фигуру для предпросмотра
+                // Create a temporary shape for live preview
                 Shape preview = factory.createShape(startX, startY, e.getX(), e.getY(), Color.BLUE);
                 canvas.setCurrentShape(preview);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                // Сохраняем фигуру в основной список
+                // Commit the shape to the main list
                 canvas.commitCurrentShape();
             }
         };
