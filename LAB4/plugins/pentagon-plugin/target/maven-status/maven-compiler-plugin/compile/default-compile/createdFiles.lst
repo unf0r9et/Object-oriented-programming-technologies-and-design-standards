@@ -1,0 +1,7 @@
+plugin/pentagon/PentagonPlugin.class
+plugin/pentagon/Pentagon.class
+plugin/pentagon/PentagonDeserializer.class
+plugin/pentagon/PentagonSerializer.class
+plugin/pentagon/PentagonRenderer.class
+plugin/pentagon/PentagonFactory.class
+plugin/pentagon/PentagonEditor.class

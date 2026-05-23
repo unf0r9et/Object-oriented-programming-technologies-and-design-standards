@@ -12,6 +12,5 @@ public abstract class Shape {
         this.y = y;
         this.color = color;
     }
-
     public abstract void draw(Graphics g);
 }

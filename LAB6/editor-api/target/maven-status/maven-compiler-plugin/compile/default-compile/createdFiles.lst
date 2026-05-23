@@ -1,0 +1,10 @@
+io/ShapeSerializer.class
+plugin/FileProcessingPlugin.class
+plugin/signature/PluginSignatureVerifier.class
+editor/ShapeEditor.class
+render/ShapeRenderer.class
+factory/ShapeFactory.class
+plugin/signature/PluginSignature.class
+plugin/ShapePlugin.class
+io/ShapeDeserializer.class
+shape/Shape.class

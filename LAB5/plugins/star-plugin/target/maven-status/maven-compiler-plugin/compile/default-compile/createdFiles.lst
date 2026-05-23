@@ -1,0 +1,7 @@
+plugin/star/StarEditor.class
+plugin/star/StarSerializer.class
+plugin/star/StarDeserializer.class
+plugin/star/StarFactory.class
+plugin/star/Star.class
+plugin/star/StarPlugin.class
+plugin/star/StarRenderer.class

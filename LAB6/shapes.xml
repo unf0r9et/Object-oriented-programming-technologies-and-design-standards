@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><shapeDocument version="1">
+  <metadata generated="host" author="student" savedAt="2026-05-23T08:47:37.634307892Z"/>
+  <payload format="json"><![CDATA[
+[
+  {"type":"Star","x":362,"y":658,"width":429,"height":415,"color":-16776961},
+  {"type":"Pentagon","x":446,"y":382,"width":442,"height":204,"color":-16776961}
+]
+]]></payload>
+</shapeDocument>
